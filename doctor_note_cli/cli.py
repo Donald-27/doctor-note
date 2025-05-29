@@ -48,6 +48,7 @@ def login_user(username):
     else:
         print("Invalid username or password")
 
+
 @cli.command()
 @click.option('--patient', prompt='Patient name')
 @click.option('--diagnosis', prompt='Diagnosis')
@@ -115,7 +116,7 @@ def delete_note(note_id):
         return
     db.delete(note)
     db.commit()
-    
+
     print("Note deleted successfully.")
 
 @cli.command()
