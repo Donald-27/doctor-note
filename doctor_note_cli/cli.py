@@ -101,7 +101,6 @@ def view_note(note_id):
     print(f"Prescription: {note.prescription}")
     print(f"Next Appointment: {note.next_appointment}")
     print(f"Notes:\n{note.notes_text}")
-
 @cli.command()
 @click.argument('note_id', type=int)
 def delete_note(note_id):
