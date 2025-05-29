@@ -1,0 +1,6 @@
+SQLAlchemy
+click
+bcrypt
+fpdf
+
+
