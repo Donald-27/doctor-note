@@ -115,6 +115,7 @@ def delete_note(note_id):
         return
     db.delete(note)
     db.commit()
+    
     print("Note deleted successfully.")
 
 @cli.command()
