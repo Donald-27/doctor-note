@@ -117,6 +117,7 @@ def delete_note(note_id):
 
     print("Note deleted successfully.")
 
+
 @cli.command()
 @click.argument('note_id', type=int)
 
