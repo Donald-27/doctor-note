@@ -5,7 +5,6 @@ def hash_password(password):
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 def check_password(password, hashed):
     return bcrypt.checkpw(password.encode('utf-8'), hashed)
-
 def register(db: Session, username, password):
     if db.query(User).filter(User.username == username).first():
         raise Exception("Username already taken")
