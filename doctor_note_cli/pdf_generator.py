@@ -9,6 +9,5 @@ def generate_pdf(note, filename):
     pdf.cell(0, 10, f"Date: {note.date}", ln=True)
     pdf.ln(10)
     pdf.multi_cell(0, 10, f"Notes:\n{note.notes_text}")
-
     pdf.output(filename)
     print(f"Saved PDF as {filename}")
