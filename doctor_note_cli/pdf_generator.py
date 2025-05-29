@@ -3,7 +3,6 @@ from fpdf import FPDF
 def generate_pdf(note, filename):
     pdf = FPDF()
     pdf.add_page()
-    
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, f"Patient Name: {note.patient_name}", ln=True)
     pdf.cell(0, 10, f"Diagnosis: {note.diagnosis}", ln=True)
