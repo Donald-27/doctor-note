@@ -1,5 +1,5 @@
-from doctor_note.cli import cli
-from doctor_note.db import init_db
+from doctor_note_cli.cli import cli
+from doctor_note_cli.db import init_db
 
 def main():
     init_db()
