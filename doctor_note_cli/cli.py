@@ -119,6 +119,7 @@ def delete_note(note_id):
 
 @cli.command()
 @click.argument('note_id', type=int)
+
 def export_pdf(note_id):
     global current_user
     if not current_user:
