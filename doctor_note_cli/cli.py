@@ -72,7 +72,6 @@ def add_note(patient, diagnosis, notes, prescription, appointment):
     db.add(note)
     db.commit()
     print("Note added successfully.")
-
 @cli.command()
 def list_notes():
     global current_user
