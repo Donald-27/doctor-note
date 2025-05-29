@@ -6,6 +6,7 @@ from ..auth import register, login
 from .models import DoctorNote
 from .pdf_generator import generate_pdf
 import getpass
+
 import datetime
 
 current_user = None
