@@ -7,8 +7,7 @@ class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)  # stored hashed password
-
+    password = Column(String, nullable=False) 
     notes = relationship("DoctorNote", back_populates="user")
 
 class DoctorNote(Base):
