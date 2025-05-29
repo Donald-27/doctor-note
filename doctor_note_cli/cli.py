@@ -67,8 +67,7 @@ def add_note(patient, diagnosis, notes, prescription, appointment):
         diagnosis=diagnosis,
         notes_text=notes,
         prescription=prescription,
-        next_appointment=datetime.datetime.strptime(appointment, "%Y-%m-%d").date() if appointment else None
-    )
+        next_appointment=datetime.datetime.strptime(appointment, "%Y-%m-%d").date() if appointment else None )
     db.add(note)
     db.commit()
     print("Note added successfully.")
