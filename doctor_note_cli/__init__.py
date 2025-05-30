@@ -1,6 +1,6 @@
 
 from sqlalchemy import create_engine
-from .models import Base
+from models import Base
 DATABASE_URL = "sqlite:///doctor_notes.db"
 engine = create_engine(DATABASE_URL)
 

@@ -1,10 +1,10 @@
 # doctor_note_cli/cli.py
 import click
 from sqlalchemy.orm import Session
-from .db import Session, init_db
-from ..auth import register, login
-from .models import DoctorNote
-from .pdf_generator import generate_pdf
+from db import Session, init_db
+from auth import register, login
+from models import DoctorNote
+from pdf_generator import generate_pdf
 import getpass
 
 import datetime
