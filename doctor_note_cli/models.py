@@ -9,8 +9,9 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
-    full_name = Column(String, nullable=False)         # Added full_name
-    email = Column(String, unique=True, nullable=False)  # Added email
+    full_name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+    
     notes = relationship("DoctorNote", back_populates="user")
 
 class DoctorNote(Base):
@@ -21,5 +22,7 @@ class DoctorNote(Base):
     diagnosis = Column(String, nullable=False)
     date = Column(Date, default=datetime.date.today)
     notes_text = Column(String, nullable=False)
+    prescription = Column(String, nullable=False)
+    next_appointment = Column(Date, nullable=True)
 
     user = relationship("User", back_populates="notes")

@@ -2,12 +2,11 @@ import click
 from sqlalchemy.orm import Session
 from db import Session, init_db
 from auth import register, login
-from models import DoctorNote
+from models import DoctorNote, User
 from pdf_generator import generate_pdf
 import getpass
 import datetime
-
-current_user = None
+import os
 
 def get_db():
     db = Session()
@@ -15,6 +14,15 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def get_current_user():
+    try:
+        with open(".session", "r") as f:
+            username = f.read().strip()
+        db = next(get_db())
+        return db.query(User).filter_by(username=username).first()
+    except:
+        return None
 
 @click.group()
 def cli():
@@ -37,24 +45,32 @@ def register_user(username, email, full_name):
 @cli.command()
 @click.argument('username')
 def login_user(username):
-    global current_user
     password = getpass.getpass("Password: ")
     db = next(get_db())
     user = login(db, username, password)
     if user:
-        current_user = user
+        with open(".session", "w") as f:
+            f.write(username)
         print(f"Logged in as {username}")
     else:
         print("Invalid username or password")
 
 @cli.command()
-@click.option('--patient', prompt='Patient name')
-@click.option('--diagnosis', prompt='Diagnosis')
-@click.option('--notes', prompt='Notes')
-@click.option('--prescription', prompt='Prescription', default='')
-@click.option('--appointment', prompt='Next appointment (YYYY-MM-DD)', default='')
+def logout():
+    if os.path.exists(".session"):
+        os.remove(".session")
+        print("Logged out.")
+    else:
+        print("You are not logged in.")
+
+@cli.command()
+@click.option('--patient', prompt='Patient name', required=True)
+@click.option('--diagnosis', prompt='Diagnosis', required=True)
+@click.option('--notes', prompt='Notes', required=True)
+@click.option('--prescription', prompt='Prescription', required=True)
+@click.option('--appointment', prompt='Next appointment (YYYY-MM-DD)', required=True)
 def add_note(patient, diagnosis, notes, prescription, appointment):
-    global current_user
+    current_user = get_current_user()
     if not current_user:
         print("Please login first!")
         return
@@ -65,14 +81,15 @@ def add_note(patient, diagnosis, notes, prescription, appointment):
         diagnosis=diagnosis,
         notes_text=notes,
         prescription=prescription,
-        next_appointment=datetime.datetime.strptime(appointment, "%Y-%m-%d").date() if appointment else None )
+        next_appointment=datetime.datetime.strptime(appointment, "%Y-%m-%d").date()
+    )
     db.add(note)
     db.commit()
     print("Note added successfully.")
 
 @cli.command()
 def list_notes():
-    global current_user
+    current_user = get_current_user()
     if not current_user:
         print("Please login first!")
         return
@@ -84,7 +101,7 @@ def list_notes():
 @cli.command()
 @click.argument('note_id', type=int)
 def view_note(note_id):
-    global current_user
+    current_user = get_current_user()
     if not current_user:
         print("Please login first!")
         return
@@ -103,7 +120,7 @@ def view_note(note_id):
 @cli.command()
 @click.argument('note_id', type=int)
 def delete_note(note_id):
-    global current_user
+    current_user = get_current_user()
     if not current_user:
         print("Please login first!")
         return
@@ -119,7 +136,7 @@ def delete_note(note_id):
 @cli.command()
 @click.argument('note_id', type=int)
 def export_pdf(note_id):
-    global current_user
+    current_user = get_current_user()
     if not current_user:
         print("Please login first!")
         return
