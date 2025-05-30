@@ -1,4 +1,3 @@
-# doctor_note_cli/cli.py
 import click
 from sqlalchemy.orm import Session
 from db import Session, init_db
@@ -6,7 +5,6 @@ from auth import register, login
 from models import DoctorNote
 from pdf_generator import generate_pdf
 import getpass
-
 import datetime
 
 current_user = None
@@ -25,15 +23,16 @@ def cli():
 
 @cli.command()
 @click.argument('username')
-@click.option('--email', prompt='Email', required=False)
-@click.option('--full_name', prompt='Full Name', required=False)
+@click.option('--email', prompt='Email', required=True)
+@click.option('--full_name', prompt='Full Name', required=True)
 def register_user(username, email, full_name):
     password = getpass.getpass("Password: ")
     db = next(get_db())
     try:
         register(db, username, password, full_name, email)
+        print("User registered successfully.")
     except Exception as e:
-        print(e)
+        print(f"Error registering user: {e}")
 
 @cli.command()
 @click.argument('username')
@@ -47,7 +46,6 @@ def login_user(username):
         print(f"Logged in as {username}")
     else:
         print("Invalid username or password")
-
 
 @cli.command()
 @click.option('--patient', prompt='Patient name')
@@ -71,6 +69,7 @@ def add_note(patient, diagnosis, notes, prescription, appointment):
     db.add(note)
     db.commit()
     print("Note added successfully.")
+
 @cli.command()
 def list_notes():
     global current_user
@@ -100,6 +99,7 @@ def view_note(note_id):
     print(f"Prescription: {note.prescription}")
     print(f"Next Appointment: {note.next_appointment}")
     print(f"Notes:\n{note.notes_text}")
+
 @cli.command()
 @click.argument('note_id', type=int)
 def delete_note(note_id):
@@ -114,13 +114,10 @@ def delete_note(note_id):
         return
     db.delete(note)
     db.commit()
-
     print("Note deleted successfully.")
-
 
 @cli.command()
 @click.argument('note_id', type=int)
-
 def export_pdf(note_id):
     global current_user
     if not current_user:
@@ -133,3 +130,7 @@ def export_pdf(note_id):
         return
     filename = f"doctor_note_{note_id}.pdf"
     generate_pdf(note, filename)
+    print(f"PDF exported as {filename}")
+
+if __name__ == "__main__":
+    cli()

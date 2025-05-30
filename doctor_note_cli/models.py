@@ -1,16 +1,17 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship, declarative_base
 import datetime
-Base = declarative_base()
 
+Base = declarative_base()
 
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False) 
+    password = Column(String, nullable=False)
+    full_name = Column(String, nullable=False)         # Added full_name
+    email = Column(String, unique=True, nullable=False)  # Added email
     notes = relationship("DoctorNote", back_populates="user")
-
 
 class DoctorNote(Base):
     __tablename__ = "doctor_notes"
